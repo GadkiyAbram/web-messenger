@@ -1,0 +1,61 @@
+import React, { useState } from 'react';
+import Card from '../../components/Layout/UI/Card';
+import Layout from '../../components/Layout';
+import { signup } from '../../actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+
+
+/**
+* @author
+* @function RegisterPage
+**/
+
+
+const RegisterPage = (props) => {
+
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const dispatch = useDispatch();
+    const auth = useSelector(state => state.auth);
+
+    const registerUser = (e) => {
+
+        e.preventDefault();
+
+        const user = {
+            firstName, lastName, email, password
+        }
+        dispatch(signup(user))
+    }
+
+    if(auth.authenticated){
+        return <Redirect to={`/`} />
+    }
+
+    return(
+        <Layout>
+            <div className="registerContainer">
+                <Card>
+                    <form onSubmit={registerUser}>
+
+                        <h1>Sign up</h1>
+
+                        <input name="firstName" type="text" value={firstName} onChange={(f) => setFirstName(f.target.value)} placeholder="First Name"/>
+                        <input name="lastName" type="text" value={lastName} onChange={(l) => setLastName(l.target.value)} placeholder="Last Name"/>
+                        <input name="email" type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"/>
+                        <input name="password" type="password" value={password} onChange={(p) => setPassword(p.target.value)} placeholder="Password"/>
+                        <div>
+                            <button>Sign up</button>
+                        </div>
+                    </form>
+                </Card>
+            </div>
+        </Layout>
+    )
+}
+
+
+export default RegisterPage
